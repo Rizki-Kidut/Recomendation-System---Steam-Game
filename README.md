@@ -457,6 +457,8 @@ Hasil rekomendasi untuk game Portal 2 pada Tabel 16 di atas memiliki *popular ta
 
 Hasil rekomendasi dengan filter *game details* terdapat pada Tabel 17 dibawah ini.
 
+Tabel 17. Hasil rekomendasi *Content Base Filtering* dengan filter *game details* untuk *game* Portal 2
+
 |   |                                name |                                      game_details |
 |--:|------------------------------------:|--------------------------------------------------:|
 | 0 |                            Apollo4x | Single-player,Steam Trading Cards,Captions ava... |
@@ -480,6 +482,156 @@ Pendekatan yang biasa dilakukan adalah dengan memprediksi skor xui yang diperson
 Hal ini menyiratkan bahwa jika model kita cocok dengan data pelatihan, maka model akan memperlakukan semua interaksi yang tidak ada dalam data pelatihan dengan cara yang sama karena semuanya diberi label 0. Pendekatan ini tidak perlu mempertimbangkan peringkat dalam rekomendasi di masa mendatang.
 
 Dalam pendekatan BPR, alih-alih mengambil satu item, pasangan item akan dianggap sebagai data pelatihan. Pengoptimalan akan dilakukan berdasarkan peringkat dari pasangan pengguna-item ini, bukan hanya berdasarkan interaksi pengguna-item. Dataset yang akan dipertimbangkan dirumuskan sebagai berikut
+
+$$(u,i,j) \in D_s$$
+
+Semantik dari (u, i, j) ∈ DS adalah pengguna u diasumsikan lebih memilih i daripada j.
+
+![BPR](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/e219e63f-a790-40e5-8f91-e6438697a024)
+
+Gambar 8. Penanganan Data Implicit dengan BPR
+
+Triplet yang dihasilkan untuk data training adalah preferensi *pair-wise user-specific* antara sepasang item. Pada gambar di atas, pengguna u1 telah melihat item i2 tetapi tidak melihat item i1, sehingga algoritme mengasumsikan bahwa pengguna ini lebih menyukai item i2 daripada i1 (i2 > i1) dan memberikan tanda positif. Tidak ada kesimpulan yang dapat dibuat tentang preferensi untuk item yang telah dilihat oleh pengguna dan ditampilkan sebagai tanda ? Hal yang sama juga berlaku untuk dua item yang belum pernah dilihat oleh pengguna (misalnya item i1 dan i4 untuk pengguna u1). Sebaliknya, Anda dapat melihat tanda negatif untuk (i1, j2) karena pengguna lebih memilih item2 daripada item1.
+
+Tahapan yang dilakukan dalam pembuatan model *Collaborative filtering* dengan *BPR* adalah sebagai berikut
+
+#### 1. *Data Preparation*.
+Pada tahap ini *Implicit Feedback* pada dataset berupa jam bermain pada *game*, diubah menjadi nilai rating dengan menghitung rata-rata jam bermain untuk tiap *game*. Kemudian jam bermain dikalikan dengan rata-rata jam bermain dan dibuatkan kriteria kondisi agar hasil perkalian dapat dikonversi menjadi nilai rating dengan nilai dari 1 - 5. Karena, data final_ratings belum memiliki identitas untuk *user* dan *game*. Maka dibuatkan kolom *user_id* dan *game_id* 
+
+Hasil konversi tertera pada Tabel 18. 
+
+Tabel 18. Konversi jam bermain ke nilai rating dan penambahan *user_id* dan *game_id*
+
+|       |      user |              game | rating | user_id | game_id |
+|------:|----------:|------------------:|-------:|--------:|--------:|
+|   0   |      5250 |       Alien Swarm |      5 |    9529 |     131 |
+|   1   |     76767 |       Alien Swarm |      1 |   10384 |     131 |
+|   2   |    298950 |       Alien Swarm |      2 |    8487 |     131 |
+|   3   |    975449 |       Alien Swarm |      5 |   11243 |     131 |
+|   4   |   1364546 |       Alien Swarm |      1 |    1599 |     131 |
+|  ...  |       ... |               ... |    ... |     ... |     ... |
+| 70472 | 301355977 |      Terrain Test |      5 |    8613 |    3006 |
+| 70473 | 302328584 | Electric Highways |      5 |    8649 |    1027 |
+| 70474 | 302980730 |          Abducted |      5 |    8689 |      62 |
+| 70475 | 303789064 |         Pink Hour |      5 |    8725 |    2221 |
+| 70476 | 307846753 |     SimpleRockets |      5 |    8851 |    2706 |
+
+
+Tahap selanjutnya adalah menambahkan kolom *game_id* ke data *game dataset* agar terdapat hubungan antara kedua data tersebut. Kolom *game_id* dari data *final_ratings* digabungkan dengan data *usedGames* menggunakan pendekatan *inner join*. Hasil penggabungan keduanya diberi nama data *game*. Dan dibuatkan dataset baru *game_new* yang berisikan *game_id*, *game* dan *genre* dari data *game*. Dataset *game_new* terdapat pada Tabel 19.
+
+Tabel 19. Dataset *game_new*
+
+|       |   id | game_name |                                  genre |
+|------:|-----:|----------:|---------------------------------------:|
+|   0   |  777 |      DayZ | Action,Adventure,Massively Multiplayer |
+|   1   |  777 |      DayZ | Action,Adventure,Massively Multiplayer |
+|   2   |  777 |      DayZ | Action,Adventure,Massively Multiplayer |
+|   3   |  777 |      DayZ | Action,Adventure,Massively Multiplayer |
+|   4   |  777 |      DayZ | Action,Adventure,Massively Multiplayer |
+|  ...  |  ... |       ... |                                    ... |
+| 35969 | 1287 |      GRID | Action,Casual,Racing,Simulation,Sports |
+| 35970 | 1287 |      GRID | Action,Casual,Racing,Simulation,Sports |
+| 35971 | 1287 |      GRID | Action,Casual,Racing,Simulation,Sports |
+| 35972 | 1287 |      GRID | Action,Casual,Racing,Simulation,Sports |
+| 35973 | 1287 |      GRID | Action,Casual,Racing,Simulation,Sports |
+
+Lalu tahap terakhir adalah *encoding* fitur *user_id* dan *game_id* kedalam indeks integer, dan melakukan pemetaan ke dataframe yang berkaitan.
+
+#### 2. Membagi Data Training dan Validasi
+
+Data train dan validasi dibagi dengan komposisi 80:20. Namun sebelumnya, perlu dilakukan pememetaan *(mapping)* data user dan game agar menjadi satu value terlebih dahulu. Lalu, buatlah rating dalam skala 0 sampai 1 agar mudah dalam melakukan proses training.
+
+#### 3. Training Model
+
+Pada tahap ini, model menghitung skor kecocokan antara pengguna dan *game* dengan teknik *embedding*. Pertama, dilakukan proses *embedding* terhadap data user dan resto. Selanjutnya, melakukan operasi perkalian *dot product* antara *embedding* *user* dan *game*. Selain itu, ditambahkan bias untuk setiap *user* dan *game*. Skor kecocokan ditetapkan dalam skala [0,1] dengan fungsi aktivasi *sigmoid*.
+
+Dibuatkan *class RecommenderNet* dengan *keras Model class*. Kode *class RecommenderNet* ini terinspirasi dari tutorial dalam situs Keras dengan beberapa adaptasi sesuai kasus yang sedang diselesaikan.
+
+Selanjutnya, melakukan proses compile terhadap model. Model ini menggunakan *Binary Crossentropy* untuk menghitung *loss function*, *Adam (Adaptive Moment Estimation)* sebagai *optimizer*, dan *root mean squared error (RMSE)* sebagai *metrics evaluation*. Langkah berikutnya, adalah memulai proses training.
+
+#### 4. Visualisasi Metrik
+
+ntuk melihat visualisasi proses training, dilakukan plot metrik evaluasi dengan matplotlib.
+
+![Model-metrics](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/48511ded-3b98-4377-b091-93293b2a7723)
+
+Gambar 9. Visualisasi metrik evaluasi
+
+Dari Gambar 9 terlihat bahwa proses training model cukup smooth pada iterasi ke 30 belum terlihat bahwa model konvergen.Dari proses ini, kita memperoleh nilai error akhir sebesar sekitar 0.3721 dan error pada data validasi sebesar 0.6663. Nilai tersebut cukup bagus untuk sistem rekomendasi.
+
+#### 5. Mendapatkan Rekomendasi Game
+
+Untuk mendapatkan rekomendasi game, pertama ambil sampel *user* secara acak dan definisikan variabel *game_not_played* yang merupakan daftar *game* yang belum pernah dimainkan oleh pengguna. Tujuan variabel *game_not_played* ini ditentukan, karena daftar *game_not_played* inilah yang akan menjadi *game* yang akan direkomendasikan. 
+
+Sebelumnya, pada data *user* dapat diketahui *game* apa saja yang telah dimainkan oleh pengguna beserta dengan jumlah Jam bermainnya. Jumlah jam bermain yang kemudian dikonversi menjadi rating digunakan untuk membuat rekomendasi *game* yang mungkin cocok untuk pengguna. *Game* yang akan direkomendasikan tentulah *game* yang belum pernah dimainkan oleh pengguna. Oleh karena itu, perlu dibuatkan variabel *game_not_played* sebagai daftar *game* untuk direkomendasikan pada pengguna. 
+
+Variabel *game_not_played* diperoleh dengan menggunakan operator bitwise (~) pada variabel *game_played_by_user*.
+
+Hasil rekomendasinya adalah sebagai berikut:
+
+![image](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/0a3c6af6-4a6b-4743-ba69-b8a70defa1d5)
+
+Gambar 10. Hasil rekomendasi Collaborative Filtering - BPR
+
+## Evaluasi
+
+### - Content Based Filtering - based on Genre
+
+Untuk mengukur seberapa baik model, digunakan metrik evaluasi. Adapun metrik yang sebagai alat ukur perfoma model yang dibuat antara lain ***Precission***
+
+- Presisi adalah metrik yang digunakan untuk mengevaluasi kinerja model pengelompokan. Metrik ini menghitung rasio prediksi positif sejati terhadap jumlah total prediksi positif (positif sejati dan positif palsu).
+
+Rumus dari presisi adaalah sebagai berikut:
+
+$$ Precision = \dfrac {TP}  {(TP + FP)} $$
+
+dimana
+- TP (True Positives) adalah jumlah kejadian positif yang diprediksi dengan benar.
+- FP (False Positif) adalah jumlah kejadian positif yang diprediksi salah.
+
+Adapun interpretasi hasil presisi berdasarkan Tabel 15, 16, dan 17 dapat dilihat bahwasanya besar presisi jika dihitung dengan menggunakan rumusan presisi adalah 5/5 atau 100% untuk model rekomendasi Top-5. Hal ini menunjukkan bahwa model mampu memberikan rekomendasi dengan tingkat presisi yang sangat baik (dalam hal ini 100%). Hal ini sesuai dengan hasil uji dimana model mampu memberikan rekomendasi dengan *Genre*, *Popular Tags*, dan *Game Details* yang yang mirip dengan game "Portal 2" yaitu dengan Genres: Education, Type: Free dan Content Rating: Everyone. Hasil rekomendasi menampilkan 5 buah *game* dengan Genres: *Action* dan *Adventure*, Popular Tags: *Puzzle,Co-op,First-Person,Sci-fi,Comedy* dan Game details: *Single-player dan Steam Achievements* yang serupa dengan "Portal 2".
+
+### - Collaborative Filtering
+
+Metrics yang digunakan untuk mengevaluasi kinerja dari *Collaborative Filtering* ini adalah *RMSE (Root-Mean Squared Error)*.
+
+*Root mean square error* atau *root mean square deviation* salah satu ukuran yang paling umum digunakan untuk mengevaluasi kualitas prediksi. Ukuran ini menunjukkan seberapa jauh prediksi jatuh dari nilai sebenarnya yang diukur menggunakan jarak *Euclidean*.
+
+Untuk menghitung RMSE, hitung residual (perbedaan antara prediksi dan kebenaran) untuk setiap titik data, hitung norma residual untuk setiap titik data, hitung rata-rata residual, dan ambil akar kuadrat dari rata-rata tersebut. RMSE biasanya digunakan dalam aplikasi *supervised learning*, karena RMSE menggunakan dan membutuhkan pengukuran yang sebenarnya pada setiap titik data yang diprediksi.
+
+Root mean square error dapat dihitung dengan persamaan berikut: 
+
+$$RMSE = \sqrt {\frac{\sum_{i=1}^{N} || y(i) - \hat{y}(i) ||^2}{N}}$$
+
+di mana N adalah jumlah titik data, y(i) adalah pengukuran ke-i, dan y ̂(i) adalah prediksi yang sesuai.
+
+Nilai RMSE dari model jika dibandingkan dengan data validasi adalah 0.42014. Nilai RMSE cukup rendah, hal ini menunjukkan bahwa model memiliki akurasi yang cukup baik dalam memberikan rekomendasi dengan pendekatan *Collaborative Filtering*.
+
+
+### Jawaban dari pertanyaan pada *Problem Statement*
+
+Setelah melakukan Ekplorasi Data hingga pembuatan 2 model rekomendasi, maka jawaban dari pertanyaan pada *Problem Statement* adalah sebagai berikut:
+
+1. Dari data *Implicit Feedback* pada *Steam Store* Apakah dapat dibuatkan sistem rekomendasi yang cukup baik?
+
+   Ya, dari data *Implicit Feedback* tersebut telah berhasil dibuat model rekomendasi dengan pendekatan *Collaborative Filtering* dengan Algoritma BPR. Hasil evaluasi model dengan metrics *RMSE* adalah 0.4214, nilai yang cukup bagus. Dan model telah dapat menghasilkan rekomendasi.
+
+- Dari serangkaian data tersebut, *Game* apa yang peling banyak dimainkan oleh *user*?
+
+  Dari Eksplorasi data, *game* yang paling banyak dimainkan oleh *user* adalah *Dota 2* dengan total 4.841 *user* dan total 981.684,6 jam bermain atau setara dengan 112,68 tahun.
+     
+- *Game* apa yang memilki *user* paling banyak?
+
+  Dari Eksplorasi data, *game* dengan jumlah *user* terbanyak adalah *Dota 2* dengan total 4.841 *user*
+  
+- Apakah terdapat korelasi antara lama bermain dengan jumlah *user*?
+
+  Untuk beberapa kasus, tidak ada korelasi antara jumlah total pengguna dan total jam yang dimainkan, yang berarti bahwa jumlah pengguna yang tinggi tidak merepresentasikan jumlah jam yang tinggi pula. Penjelasan yang mungkin untuk hal ini adalah karena game ini dibeli sebagai bagian dari bundel game.
+  
+- Apakah dari data tersebut dapat pula dikembangkan sistem rekomendasi *Content Based FIltering*?
+
+  Ya, sistem rekomendasi *Content Based Filtering* telah berhasil dikembangkan dan sudah dapat memberikan rekomendasi dengan 3 macam filter yaitu Genre, Popular Tags, dan Game Details. Hasil evaluasi dengan metriks presisi menunjukkan bahwa hasil rekomendasi relevan dengan nili 100%
+
 
 ## Referensi 
 [1] A. Pathak, K. Gupta, and J. McAuley. Generating and Personalizing Bundle Recommendations on Steam. In SIGIR, 2017.
