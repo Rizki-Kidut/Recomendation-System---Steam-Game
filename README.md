@@ -384,7 +384,7 @@ Tahapan yang dilakukan dalam pembuatan model *Content Based Filtering* dengan *C
 
 Tabel 12. Matriks TF-IDF dengan filter genre
 
-    |                                                             | utilities | multiplayer |   sports | production | education |   free | video | strategy |    indie | access | ... | design | massively | illustration | software |   action | adventure |     to | animation | simulation | training |
+|                                                             | utilities | multiplayer |   sports | production | education |   free | video | strategy |    indie | access | ... | design | massively | illustration | software |   action | adventure |     to | animation | simulation | training |
 |------------------------------------------------------------:|----------:|------------:|---------:|-----------:|----------:|-------:|------:|---------:|---------:|-------:|----:|-------:|----------:|-------------:|---------:|---------:|----------:|-------:|----------:|-----------:|---------:|
 |                                                        name |           |             |          |            |           |        |       |          |          |        |     |        |           |              |          |          |           |        |           |            |          |
 |                         Axiom Verge                         |       0.0 |    0.000000 | 0.000000 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.000000 | 0.517948 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.531790 |  0.670022 | 0.0000 |       0.0 |   0.000000 |      0.0 |
