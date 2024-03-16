@@ -165,6 +165,309 @@ Tabel 5. Kondisi awal *Game dataset*
 | 8 | https://store.steampowered.com/app/644930/They... |    app |                          They Are Billions | They Are Billions is a Steampunk strategy game... | Very Positive,(192),- 83% of the 192 user revi... | Very Positive,(12,127),- 85% of the 12,127 use... | Dec 12, 2017 |     Numantian Games |         Numantian Games,Numantian Games | Early Access,Base Building,Strategy,Zombies,Su... | Single-player,Steam Achievements,Steam Trading... | English,Spanish - Spain,French,German,Japanese... |         34.0 |                             Strategy,Early Access |  About This Game They Are Billions is a strat... |                                             NaN | Minimum:,OS:,Windows 7, 8, 10 (32 and 64 bits)... |  Recommended:,OS:,Windows 7, 8, 10 (64 bits),P... |         $29.99 |            NaN |
 | 9 | https://store.steampowered.com/app/774241/Warh... |    app |                       Warhammer: Chaosbane | In a world ravaged by war and dominated by mag... |                                               NaN | Mixed,(904),- 44% of the 904 user reviews for ... | May 31, 2019 |        Eko Software |   Bigben Interactive,Bigben Interactive | RPG,Adventure,Hack and Slash,Action,Action RPG... | Single-player,Multi-player,Co-op,Online Co-op,... | English,French,Italian,German,Spanish - Spain,... |         43.0 |                              Action,Adventure,RPG |  About This Game “Keep your eyes on this one,... | Mature Content Description The developers de... | Minimum:,Requires a 64-bit processor and opera... | Recommended:,Requires a 64-bit processor and o... |         $49.99 |            NaN |
 
+Terdapat 40.817 game dalam dataset ini. Jika melihat jumlah non-null , dapat disimpulkan dataset ini memiliki banyak missing-values.
+
+### Univariate Exploratory Data Analysis
+
+### a. *User  Dataset*
+
+Untuk mengetahui apakah *game* yang paling banyak dibeli sesuai dengan *game* yang paling banyak dimainkan. Untuk setiap *game*, jumlah total pengguna dan total waktu *game* dimainkan oleh semua pengguna dihitung. Hasilnya ditampilkan pada tabel di bawah ini dalam urutan menurun berdasarkan jumlah pengguna. Tabel dibuat untuk 20 *game* teratas dengan pengguna terbanyak.
+
+Tabel 6. 20 *Game* dengan pengguna terbanyak
+
+|    | index |                                         game | user |      hrs |
+|---:|:-----:|---------------------------------------------:|:----:|---------:|
+|  0 |  1336 |                                       Dota 2 | 4841 | 981684.6 |
+|  1 |  4257 |                              Team Fortress 2 | 2323 | 173673.3 |
+|  2 |  4788 |                                     Unturned | 1563 |  16096.4 |
+|  3 |   981 |              Counter-Strike Global Offensive | 1412 | 322771.6 |
+|  4 |  2074 |                       Half-Life 2 Lost Coast |  981 |    184.4 |
+|  5 |   984 |                        Counter-Strike Source |  978 |  96075.5 |
+|  6 |  2475 |                                Left 4 Dead 2 |  951 |  33596.7 |
+|  7 |   978 |                               Counter-Strike |  856 | 134261.1 |
+|  8 |  4899 |                                     Warframe |  847 |  27074.6 |
+|  9 |  2071 |                       Half-Life 2 Deathmatch |  823 |   3712.9 |
+| 10 |  1894 |                                  Garry's Mod |  731 |  49725.3 |
+| 11 |  4364 |                   The Elder Scrolls V Skyrim |  717 |  70889.3 |
+| 12 |  3562 |                                    Robocraft |  689 |   9096.6 |
+| 13 |   980 | Counter-Strike Condition Zero Deleted Scenes |  679 |    418.2 |
+| 14 |   979 |                Counter-Strike Condition Zero |  679 |   7950.0 |
+| 15 |  2142 |                            Heroes & Generals |  658 |   3299.5 |
+| 16 |  2070 |                                  Half-Life 2 |  639 |   4260.3 |
+| 17 |  3825 |                   Sid Meier's Civilization V |  596 |  99821.3 |
+| 18 |  4885 |                                  War Thunder |  590 |  14381.6 |
+| 19 |  3222 |                                       Portal |  588 |   2282.8 |
+
+Dari Tabel 6 terlihat bahwa, untuk beberapa *game*, ada hubungan antara yang paling banyak dimainkan dan yang paling banyak dibeli. Sebagai contoh, '*Dota 2*' tidak dapat disangkal lagi merupakan *game* yang paling populer, memiliki jumlah pengguna terbanyak dan total jam bermain terbanyak. Namun, hal ini tidak selalu terjadi, contoh yang menarik adalah '*Half-Life 2 Lost Coast*' yang memiliki jumlah pengguna yang tinggi (981 pengguna), tetapi total jam bermainnya cukup rendah (184,4 jam). Penjelasan yang mungkin untuk hal ini adalah karena game ini dibeli sebagai bagian dari bundel game.
+
+Untuk memvisualisasikan hasil yang ditampilkan pada tabel di atas dengan lebih baik, *plot histogram* digunakan. Judul *game* diurutkan dalam urutan menurun berdasarkan jumlah pengguna. Gradien warna menunjukkan total jam bermain, dari yang paling banyak dimainkan hingga yang paling sedikit dimainkan.
+
+![histogram-game-with-most-users](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/f5394a9d-cd8d-45db-9cfd-835ecaa1dc45)
+
+Gambar 1. 20 game dengan Pengguna terbanyak
+
+Dari Gambar 1 terlihat bahwa beberapa kasus, tidak ada hubungan antara jumlah total pengguna dan total jam yang dimainkan, yang berarti bahwa jumlah pengguna yang tinggi tidak merepresentasikan jumlah jam yang tinggi pula.
+
+Jenis plot yang sama dibuat ulang, tetapi kali ini hanya mempertimbangkan pengguna yang benar-benar memainkan *game*. Jadi, untuk setiap game, pengguna yang membelinya tetapi tidak pernah memainkannya dihapus.
+
+![histogram-game-with-most-users-play](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/3d8e1fcd-8e2f-45e7-9118-dea01986b580)
+
+Gambar 2. 20 game dengan Pengguna terbanyak (Dimainkan)
+
+Ketika membandingkan plot baru ini dengan plot sebelumnya, beberapa *game* jatuh dari 20 *game*teratas berdasarkan jumlah pengguna. Sebagai contoh '*Counter-Strike Condition Zero*', yang berada di posisi 15 teratas dalam plot dengan mempertimbangkan semua pengguna yang membeli *game* tersebut, tidak muncul di 20 *game* teratas dengan mempertimbangkan hanya pengguna yang benar-benar memainkan *game* tersebut. Contoh yang berlawanan adalah '*Terraria*' yang muncul di plot kedua sebagai 11 teratas sementara tidak terdaftar di plot pertama. Seperti yang telah disebutkan sebelumnya, penjelasan yang mungkin untuk perbedaan ini adalah beberapa *game* dibeli sebagai bagian dari bundel *game*.
+
+### b. *Game Dataset*
+
+Untuk memahami lebih baik bagaimana ulasan *game* didistribusikan, jumlah *game* dengan persentase ulasan positif masing-masing diplot.
+
+Tabel 7. Ulasan pada *game dataset*
+
+|       |                                              name | percentage_positive_review | review_qualification |                                       all_reviews |
+|------:|--------------------------------------------------:|---------------------------:|---------------------:|--------------------------------------------------:|
+|   0   |                                              DOOM |                         92 |        Very Positive | Very Positive,(42,550),- 92% of the 42,550 use... |
+|   1   |                     PLAYERUNKNOWN'S BATTLEGROUNDS |                         49 |                Mixed | Mixed,(836,608),- 49% of the 836,608 user revi... |
+|   2   |                                        BATTLETECH |                         71 |      Mostly Positive | Mostly Positive,(7,030),- 71% of the 7,030 use... |
+|   3   |                                              DayZ |                         61 |                Mixed | Mixed,(167,115),- 61% of the 167,115 user revi... |
+|   4   |                                        EVE Online |                         74 |      Mostly Positive | Mostly Positive,(11,481),- 74% of the 11,481 u... |
+|  ...  |                                               ... |                        ... |                  ... |                                               ... |
+| 40828 | Rocksmith® 2014 Edition – Remastered – Sabaton... |                         -1 |                  NaN |                                               NaN |
+| 40829 | Rocksmith® 2014 Edition – Remastered – Stone T... |                         -1 |                  NaN |                                               NaN |
+| 40830 | Fantasy Grounds - Quests of Doom 4: A Midnight... |                         -1 |                  NaN |                                               NaN |
+| 40831 |                      Mega Man X5 Sound Collection |                         -1 |                  NaN |                                               NaN |
+| 40832 |                                  Stories In Stone |                         -1 |                  NaN |                                               NaN |
+
+
+![Distribution-of-Game-Reviews](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/1ea5dc0b-2a2d-4c86-8fbd-3f46944fb1cb)
+
+Gambar 3. Distribusi ulasan game
+
+Dari Gambar 3 diatas terlihat jelas bahwa nilai ulasan untuk *game* dalam *game dataset* terkonsentrasi pada nilai rating 60-100%.
+
+Hal ini mengindikasikan bahwa kebanyakan *game* mendapatkan ulasan yang cukup baik dari pengguna.
+
+Plot di bawah ini mencantumkan semua genre game yang tersedia di dataset game dengan jumlah game masing-masing.
+
+![Recurrence-of-Genre](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/5fe130f0-7aa1-4720-b021-d450ee332c26)
+
+Gambar 4. Genre *game* pada dataset
+
+Berdasarkan Gambar 4 diatas, 5 genre terbanyak dalam *dataset* adalah *Indie, Action, Adventure, Casual,* dan *Simulation*. Hal ini mengindikasikan *game Action, Adventure* masih menjadi primadona dimata para pecinta *game* pada *Steam Store*
+
+Plot serupa dibuat, menunjukkan 20 tag game terpopuler yang tersedia di dataset game dengan jumlah game masing-masing.
+
+![Recurrence-of-Popular-Tags](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/98d6051a-2633-45d2-87bc-5d3758750bfb)
+
+Gambar 5. Tag populer pada dataset
+
+Hasil yang ditunjukkan pada Gambar 5 serupa dengan hasil pada plot *genre*. Dimana hasil 5 *popular tag* adalah *Indie, Action, Adventure, Casual, dan Simulation*
+
+
+## Data Preparation
+
+Untuk membangun sistem rekomendasi, data perlu dilakukan proses data preparation. Untuk melakukannya, pertama-tama perlu dilakukan praproses pada dataset game.
+
+1. Memilih informasi yang berguna
+2. Menangani *missing values*
+3. Filter data dari kedua dataset
+
+### 1. Pilih informasi yang berguna
+
+Untuk menyiapkan data untuk rekomendasi berbasis konten, langkah pertama adalah memilih informasi yang paling berguna untuk menemukan game yang serupa. Kolom-kolom yang berguna dari dataset game dengan menggunakan kode berikut.
+
+Tabel 8. Fitur yang dipilih pada *game dataset*
+
+|   |                          name |                                             genre |                                      game_details |                                      popular_tags |
+|--:|------------------------------:|--------------------------------------------------:|--------------------------------------------------:|--------------------------------------------------:|
+| 0 |                          DOOM |                                            Action | Single-player,Multi-player,Co-op,Steam Achieve... | FPS,Gore,Action,Demons,Shooter,First-Person,Gr... |
+| 1 | PLAYERUNKNOWN'S BATTLEGROUNDS |            Action,Adventure,Massively Multiplayer |            Multi-player,Online Multi-Player,Stats | Survival,Shooter,Multiplayer,Battle Royale,PvP... |
+| 2 |                    BATTLETECH |                         Action,Adventure,Strategy | Single-player,Multi-player,Online Multi-Player... | Mechs,Strategy,Turn-Based,Turn-Based Tactics,S... |
+| 3 |                          DayZ |            Action,Adventure,Massively Multiplayer | Multi-player,Online Multi-Player,Steam Worksho... | Survival,Zombies,Open World,Multiplayer,PvP,Ma... |
+| 4 |                    EVE Online | Action,Free to Play,Massively Multiplayer,RPG,... | Multi-player,Online Multi-Player,MMO,Co-op,Onl... | Space,Massively Multiplayer,Sci-fi,Sandbox,MMO... |
+
+Pada Tabel 8, terdapat 40.833 data
+
+### 2. *Missing values*
+
+Inspeksi *missing values* pada dataset Sebelum menangani *missing values*, *missing values* pada data perlu di inspeksi terlebih dahulu. *Missing values* pada dataset dapat dilihat dengan fungsi isnull(). Jumlah *missing values* pada dataset terdapat pada tabel di bawah ini.
+
+Tabel 9. Jumlah *missing values* pada data
+
+|     Fitur    | _Missing Values_ |
+|:------------:|-----------------:|
+|     name     |               16 |
+|     genre    |              438 |
+| game_details |              520 |
+| popular_tags |             2945 |
+
+Dari tabel 9 terlihat bahwa da banyak *missing values* dari semua kolom, kolom "*popular tag*" adalah kolom dengan nilai yang paling banyak hilang dengan 2.945 nilai yang hilang.
+
+Dengan bantuan visualiasi matriks, tampak terlihat adanya data yang tidak lengkap seperti terlihat gambar dibawah ini:
+
+![missing-data-matrix](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/ed3480b6-74b9-46fa-ac2f-19fbb12c5b3f)
+
+Gambar 6. Matriks *missing values*
+
+
+Terdapat tiga metode yang dapat digunakan untuk menangani *missing values* antara lain seperti berikut:
+
+1. Dropping (metode yang dilakukan dengan cara menghapus sejumlah baris data)
+2. Imputation (metode yang dilakukan dengan cara mengganti nilai yang "hilang" atau tidak tersedia dengan nilai tertentu yang bisa berupa median atau mean dari data)
+3. Interpolation (metode menghasilkan titik-titik data baru dalam suatu jangkauan dari suatu data)
+
+Metode yang dipilih untuk menangani masalah *missing values* ini adalah metode Dropping. Setelah *missing values* dihilangkan, jumlah *missing values* sudah menjadi 0 untuk setiap kolom pada tabel 10 dibawah ini
+
+Tabel 10. Jumlah *missing values* setelah ditangani
+
+|     Fitur    | _Missing Values_ |
+|:------------:|-----------------:|
+|     name     |                0 |
+|     genre    |                0 |
+| game_details |                0 |
+| popular_tags |                0 |
+
+### 3. Filter data dari kedua *Dataset*
+
+Diputuskan untuk hanya menyimpan game yang ada di *game dataset* dan *user dataset*. Hal ini dipilih karena ada banyak game dalam dataset game yang belum pernah dimainkan atau dibeli oleh pengguna mana pun dalam dataset pengguna, sehingga tidak ada gunanya mempertimbangkannya dalam sistem rekomendasi. Selain itu, dataset game terlalu besar untuk membuat *matrix cosine similarity* karena membutuhkan terlalu banyak memori.
+
+Untuk mencocokkan *game* dari kedua dataset secara bersamaan, ID untuk setiap *game* dibuat dengan menghapus semua simbol non-alfanumerik dan spasi, dan mengubah semua huruf kapital menjadi huruf kecil dengan menggunakan kode berikut ini, hal yang sama juga dilakukan untuk *game-game* yang ada di *user dataset*. Setelah itu, semua ID unik dari *user dataset* digunakan untuk memfilter baris di *game dataset*, dan menampilkan nilai ID yang sama dari kedua dataset.
+
+Tabel 11. Data *game* yang telah disesuaikan dengan data *user*
+
+|       |                     name |                                             genre |                                      game_details |                                      popular_tags |                 ID |
+|------:|-------------------------:|--------------------------------------------------:|--------------------------------------------------:|--------------------------------------------------:|-------------------:|
+|   3   |                     DayZ |            Action,Adventure,Massively Multiplayer | Multi-player,Online Multi-Player,Steam Worksho... | Survival,Zombies,Open World,Multiplayer,PvP,Ma... |               dayz |
+|   4   |               EVE Online | Action,Free to Play,Massively Multiplayer,RPG,... | Multi-player,Online Multi-Player,MMO,Co-op,Onl... | Space,Massively Multiplayer,Sci-fi,Sandbox,MMO... |          eveonline |
+|   12  |                     TERA | Action,Adventure,Free to Play,Massively Multip... | Multi-player,MMO,Co-op,Steam Trading Cards,Par... | Free to Play,MMORPG,Massively Multiplayer,RPG,... |               tera |
+|   14  |              Stonehearth |                         Indie,Simulation,Strategy | Single-player,Multi-player,Online Multi-Player... | City Builder,Building,Sandbox,Strategy,Surviva... |        stonehearth |
+|   20  | Call of Duty®: Black Ops |                                            Action | Single-player,Multi-player,Co-op,Steam Achieve... | Action,FPS,Zombies,Multiplayer,Shooter,Singlep... | callofdutyblackops |
+|  ...  |                      ... |                                               ... |                                               ... |                                               ... |                ... |
+| 34491 |              Particulars |                                             Indie | Single-player,Steam Achievements,Full controll... |                              Indie,Puzzle,Physics |        particulars |
+| 34572 |                 Akuatica |                     Action,Adventure,Casual,Indie | Single-player,Steam Achievements,Steam Trading... |              Action,Indie,Casual,Adventure,Puzzle |           akuatica |
+| 39625 |                 The Deer |                                   Adventure,Indie | Single-player,Steam is learning about this gam... | Gore,Adventure,Violent,Indie,Horror,Hunting,Fi... |            thedeer |
+| 40711 |                 King-Dom |                                          Strategy | Online Multi-Player,Steam Achievements,Steam W... |                              Strategy,Chess,Indie |            kingdom |
+| 40778 |                     GRID |            Action,Casual,Racing,Simulation,Sports |                 Single-player,Online Multi-Player |     Racing,Sports,Simulation,Action,Casual,Arcade |               grid |
+
+
+Hasilnya, diperoleh 2.297 *game* dari *game dataset* yang cocok dengan 3.598 *game* dari *user dataset*.
+
+
+## Modeling
+Akan dibuatkan dua buah sistem rekomendasi menggunakan *Content Based Filtering* dan *Collaborative Based Filtering*. Algoritma yang digunakan untuk *Content Based Filtering* adalah *Cosine Similarity* dan untuk *Collaborative Based Filtering* adalah *BPR: Bayesian Personalized Ranking*
+
+### 1. *Cosine Similarity* 
+
+Dalam analisis data, *Cosine Similarity* adalah ukuran kemiripan antara dua vektor bukan nol yang didefinisikan dalam ruang hasil kali dalam. *Cosine Similarity* adalah *Cosine* dari sudut antara vektor; yaitu, hasil kali titik vektor dibagi dengan hasil kali panjangnya. Oleh karena itu, *Cosine Similarity* tidak bergantung pada besaran vektor, tetapi hanya pada sudutnya. *Cosine Similarity* selalu termasuk dalam interval.
+
+Misalnya, dua vektor proporsional memiliki *Cosine Similarity* 1, dua vektor ortogonal memiliki kemiripan 0, dan dua vektor yang berlawanan memiliki kemiripan -1. Dalam beberapa konteks, nilai komponen vektor tidak boleh negatif, dalam hal ini *Cosine Similarity* dibatasi dalam [0,1]
+
+Sebagai contoh, dalam pencarian informasi dan penggalian teks, setiap kata diberi koordinat yang berbeda dan dokumen diwakili oleh vektor jumlah kemunculan setiap kata dalam dokumen. *Cosine Similarity* kemudian memberikan ukuran yang berguna tentang seberapa mirip dua dokumen, dalam hal subjeknya, dan terlepas dari panjang dokumen.
+
+Teknik ini juga digunakan untuk mengukur kohesi dalam kelompok dalam bidang penggalian data.
+
+Salah satu keuntungan dari *Cosine Similarity* adalah kompleksitasnya yang rendah, terutama untuk vektor yang jarang: hanya koordinat yang bukan nol yang perlu dipertimbangkan.
+
+Nama lain untuk *Cosine Similarity* termasuk Orchini similarity and *Tucker coefficient of congruence*; *the Otsuka–Ochiai similarity* adalah *Cosine Similarity* yang diterapkan pada data biner.
+
+*Cosine Similarity* dari dua vektor yang tidak nol dapat diturunkan dengan menggunakan rumus dot product Euclidean:
+
+$$ Cosine Similarity (A, B) = (A · B) / (||A|| * ||B||) $$ 
+
+dimana: 
+- (A·B)menyatakan produk titik dari vektor A dan B.
+- ||A|| mewakili norma Euclidean (magnitudo) dari vektor A.
+- ||B|| mewakili norma Euclidean (magnitudo) dari vektor B.
+
+Tahapan yang dilakukan dalam pembuatan model *Content Based Filtering* dengan *Cosine Similarity* adalah sebagai berikut:
+
+1.  Ekstrak fitur penting pada data dengan *TF-IDF Vectorizer*
+2.  Hasil ekstraksi kemudian ditampilkan dalam bentuk matriks TF-IDF seperti tabel dibawah ini:
+
+Tabel 12. Matriks TF-IDF dengan filter genre
+
+    |                                                             | utilities | multiplayer |   sports | production | education |   free | video | strategy |    indie | access | ... | design | massively | illustration | software |   action | adventure |     to | animation | simulation | training |
+|------------------------------------------------------------:|----------:|------------:|---------:|-----------:|----------:|-------:|------:|---------:|---------:|-------:|----:|-------:|----------:|-------------:|---------:|---------:|----------:|-------:|----------:|-----------:|---------:|
+|                                                        name |           |             |          |            |           |        |       |          |          |        |     |        |           |              |          |          |           |        |           |            |          |
+|                         Axiom Verge                         |       0.0 |    0.000000 | 0.000000 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.000000 | 0.517948 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.531790 |  0.670022 | 0.0000 |       0.0 |   0.000000 |      0.0 |
+| Adventures of Bertram Fiddle: Episode 1: A Dreadly Business |       0.0 |    0.000000 | 0.000000 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.000000 | 0.436700 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.000000 |  0.564920 | 0.0000 |       0.0 |   0.000000 |      0.0 |
+|                            GRID 2                           |       0.0 |    0.000000 | 0.727551 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.000000 | 0.000000 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.000000 |  0.000000 | 0.0000 |       0.0 |   0.000000 |      0.0 |
+|                           Collapse                          |       0.0 |    0.000000 | 0.000000 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.000000 | 0.000000 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.621676 |  0.783274 | 0.0000 |       0.0 |   0.000000 |      0.0 |
+|                          Planetbase                         |       0.0 |    0.000000 | 0.000000 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.585946 | 0.418800 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.000000 |  0.000000 | 0.0000 |       0.0 |   0.693739 |      0.0 |
+|                      Bob Came in Pieces                     |       0.0 |    0.000000 | 0.000000 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.000000 | 0.611598 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.000000 |  0.791169 | 0.0000 |       0.0 |   0.000000 |      0.0 |
+|                          Still Life                         |       0.0 |    0.000000 | 0.000000 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.000000 | 0.000000 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.000000 |  1.000000 | 0.0000 |       0.0 |   0.000000 |      0.0 |
+|       Castlevania: Lords of Shadow – Mirror of Fate HD      |       0.0 |    0.000000 | 0.000000 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.000000 | 0.000000 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.621676 |  0.783274 | 0.0000 |       0.0 |   0.000000 |      0.0 |
+|                      Grand Theft Auto V                     |       0.0 |    0.000000 | 0.000000 |        0.0 |       0.0 | 0.0000 |   0.0 | 0.000000 | 0.000000 |    0.0 | ... |    0.0 |  0.000000 |          0.0 |      0.0 | 0.621676 |  0.783274 | 0.0000 |       0.0 |   0.000000 |      0.0 |
+|                    Dream Of Mirror Online                   |       0.0 |    0.466566 | 0.000000 |        0.0 |       0.0 | 0.3778 |   0.0 | 0.000000 | 0.000000 |    0.0 | ... |    0.0 |  0.466566 |          0.0 |      0.0 | 0.000000 |  0.234752 | 0.3778 |       0.0 |   0.000000 |      0.0 |
+
+
+
+3. Menghitung *Cosine Similarity* dengan menggunakan Matriks TF-IDF sebagai inputannya
+
+Tabel 13. *Cosine Similarity* dengan filter genre
+
+|                           name | Axiom Verge | Adventures of Bertram Fiddle: Episode 1: A Dreadly Business | GRID 2 | Collapse | Planetbase | Bob Came in Pieces | Still Life | Castlevania: Lords of Shadow – Mirror of Fate HD | Grand Theft Auto V | Dream Of Mirror Online |   |   |   |   |   |   |   |   |   |   |   |
+|-------------------------------:|------------:|------------------------------------------------------------:|-------:|---------:|-----------:|-------------------:|-----------:|-------------------------------------------------:|-------------------:|-----------------------:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+|                           name |             |                                                             |        |          |            |                    |            |                                                  |                    |                        |   |   |   |   |   |   |   |   |   |   |   |
+| Call of Duty: United Offensive |    0.531790 |                                                    0.000000 |    0.0 | 0.621676 |   0.000000 |           0.000000 |   0.000000 |                                         0.621676 |           0.621676 |               0.000000 |   |   |   |   |   |   |   |   |   |   |   |
+|  Aggression: Europe Under Fire |    0.000000 |                                                    0.000000 |    0.0 | 0.000000 |   0.585946 |           0.000000 |   0.000000 |                                         0.000000 |           0.000000 |               0.000000 |   |   |   |   |   |   |   |   |   |   |   |
+|     Secret Files: Tunguska     |    0.670022 |                                                    0.564920 |    0.0 | 0.783274 |   0.000000 |           0.791169 |   1.000000 |                                         0.783274 |           0.783274 |               0.234752 |   |   |   |   |   |   |   |   |   |   |   |
+|     Counter-Strike: Source     |    0.531790 |                                                    0.000000 |    0.0 | 0.621676 |   0.000000 |           0.000000 |   0.000000 |                                         0.621676 |           0.621676 |               0.000000 |   |   |   |   |   |   |   |   |   |   |   |
+|            HuniePop            |    0.181196 |                                                    0.152773 |    0.0 | 0.000000 |   0.835325 |           0.213958 |   0.000000 |                                         0.000000 |           0.000000 |               0.156778 |   |   |   |   |   |   |   |   |   |   |   |
+|           BattleSpace          |    0.000000 |                                                    0.000000 |    0.0 | 0.000000 |   0.154431 |           0.000000 |   0.000000 |                                         0.000000 |           0.000000 |               0.896426 |   |   |   |   |   |   |   |   |   |   |   |
+|           Poly Bridge          |    0.267683 |                                                    0.225693 |    0.0 | 0.000000 |   0.810350 |           0.316082 |   0.000000 |                                         0.000000 |           0.000000 |               0.000000 |   |   |   |   |   |   |   |   |   |   |   |
+|              Bleed             |    0.742341 |                                                    0.304696 |    0.0 | 0.445350 |   0.292206 |           0.426725 |   0.000000 |                                         0.445350 |           0.445350 |               0.000000 |   |   |   |   |   |   |   |   |   |   |   |
+|           L.A. Noire           |    0.454866 |                                                    0.383514 |    0.0 | 0.531751 |   0.430229 |           0.537111 |   0.678882 |                                         0.531751 |           0.531751 |               0.159369 |   |   |   |   |   |   |   |   |   |   |   |
+|  Ultimate General: Gettysburg  |    0.216916 |                                                    0.182890 |    0.0 | 0.000000 |   1.000000 |           0.256137 |   0.000000 |                                         0.000000 |           0.000000 |               0.000000 |   |   |   |   |   |   |   |   |   |   |   |
+
+
+4. Terakhir dibuatkan rekomendasi game. Hasil dari rekomendasi game untuk game *Portal 2*
+
+Tabel 14. Deskripsi game Portal 2
+
+|     |     name |            genre |                                      game_details |                                      popular_tags |      ID |
+|----:|---------:|-----------------:|--------------------------------------------------:|--------------------------------------------------:|--------:|
+| 255 | Portal 2 | Action,Adventure | Single-player,Co-op,Steam Achievements,Full co... | Puzzle,Co-op,First-Person,Sci-fi,Comedy,Single... | portal2 |
+
+Hasil rekomendasi dengan filter genre terdapat pada Tabel 15 dibawah ini
+
+Tabel 15. Hasil rekomendasi *Content Base Filtering* dengan filter genre untuk *game* Portal 2
+
+|   |                               name |            genre |
+|--:|-----------------------------------:|-----------------:|
+| 0 | Prince of Persia: The Two Thrones™ | Action,Adventure |
+| 1 |                      Saints Row IV | Action,Adventure |
+| 2 |                        Prototype 2 | Action,Adventure |
+| 3 |                     Tomb Raider II | Action,Adventure |
+| 4 |            Batman™: Arkham Origins | Action,Adventure |
+
+Hasil rekomendasi untuk game *Portal 2* pada Tabel 15 di atas memiliki genre yang sama yaitu *Action* dan *Adventure*
+
+Hasil rekomendasi dengan filter *popular tags* terdapat pada Tabel 16 dibawah ini.
+
+Tabel 16. Hasil rekomendasi *Content Base Filtering* dengan filter *popular tag* untuk *game* Portal 2
+
+|   |                               name |                                      popular_tags |
+|--:|-----------------------------------:|--------------------------------------------------:|
+| 0 |                      Space Farmers | Indie,Action,Co-op,Space,Multiplayer,Puzzle,On... |
+| 1 | Artemis Spaceship Bridge Simulator | Simulation,Indie,Action,Space,Co-op,Multiplaye... |
+| 2 |        Borderlands: The Pre-Sequel | Co-op,FPS,Action,Comedy,Loot,RPG,Open World,Mu... |
+| 3 |                      Serious Sam 2 | Action,FPS,Co-op,Comedy,Multiplayer,Shooter,Fi... |
+| 4 |    Rocketbirds: Hardboiled Chicken | Indie,Platformer,Action,Adventure,Great Soundt... |
+
+Hasil rekomendasi untuk game Portal 2 pada Tabel 16 di atas memiliki *popular tags* yang sama yaitu *Puzzle,Co-op,First-Person,Sci-fi,Comedy*
+
+Hasil rekomendasi dengan filter *game details* terdapat pada Tabel 17 dibawah ini.
+
+|   |                                name |                                      game_details |
+|--:|------------------------------------:|--------------------------------------------------:|
+| 0 |                            Apollo4x | Single-player,Steam Trading Cards,Captions ava... |
+| 1 |           Amnesia: The Dark Descent | Single-player,Steam Achievements,Full controll... |
+| 2 |                           Gone Home | Single-player,Steam Achievements,Full controll... |
+| 3 |                    Just Get Through | Single-player,Steam Achievements,Full controll... |
+| 4 | Hegemony III: Clash of the Ancients | Single-player,Steam Achievements,Steam Trading... |
+
+Tabel 17 di atas menunjukkan rekomendasi game berdasarkan game details. Hasil rekomendasi untuk game Portal 2 pada tabel di atas memiliki game details yang sama yaitu *Single-player dan Steam Achievements*
+
+### 2. *Collaborative Filtering - BPR Bayesian Personalized Ranking*
 
 ## Referensi 
 [1] A. Pathak, K. Gupta, and J. McAuley. Generating and Personalizing Bundle Recommendations on Steam. In SIGIR, 2017.
