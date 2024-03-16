@@ -469,6 +469,18 @@ Tabel 17 di atas menunjukkan rekomendasi game berdasarkan game details. Hasil re
 
 ### 2. *Collaborative Filtering - BPR Bayesian Personalized Ranking*
 
+Tugas utama dari Personalized Ranking adalah untuk memberikan daftar peringkat kepada pengguna
+
+![Personalized](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/75020af6-3594-4b4c-ab07-2774127c95a9)
+
+Gambar 7. Penanganan Data Implicit secara umum
+
+Pendekatan yang biasa dilakukan adalah dengan memprediksi skor xui yang dipersonalisasi untuk sebuah item yang mencerminkan preferensi pengguna untuk item tersebut. Setelah itu, item akan diurutkan berdasarkan skor tersebut. Di sini, seperti yang Anda lihat pada gambar di atas, semua interaksi yang ada antara pengguna dan item diberi label sebagai kelas positif (1) dan interaksi lainnya diberi label sebagai kelas negatif (0).
+
+Hal ini menyiratkan bahwa jika model kita cocok dengan data pelatihan, maka model akan memperlakukan semua interaksi yang tidak ada dalam data pelatihan dengan cara yang sama karena semuanya diberi label 0. Pendekatan ini tidak perlu mempertimbangkan peringkat dalam rekomendasi di masa mendatang.
+
+Dalam pendekatan BPR, alih-alih mengambil satu item, pasangan item akan dianggap sebagai data pelatihan. Pengoptimalan akan dilakukan berdasarkan peringkat dari pasangan pengguna-item ini, bukan hanya berdasarkan interaksi pengguna-item. Dataset yang akan dipertimbangkan dirumuskan sebagai berikut
+
 ## Referensi 
 [1] A. Pathak, K. Gupta, and J. McAuley. Generating and Personalizing Bundle Recommendations on Steam. In SIGIR, 2017.
 
