@@ -17,26 +17,28 @@ Pengembangan sistem rekomendasi dari *Implicit Feedback* pembelian game dan lama
 ### Problem Statement
 
 Berdasarkan kondisi tersebut maka perlu dikembangkan sistem prediksi untuk dapat menjawab permasalahan tersebut:
-- Dari data *Implicit Feedback* pada *Steam Store* Apakah dapat dibuatkan sistem rekomendasi yang cukup baik?
-- Dari serangkaian data tersebut, *Game* apa yang peling banyak dimainkan oleh *user*?
-- *Game* apa yang memilki *user* paling banyak?
-- Apakah terdapat korelasi antara lama bermain dengan jumlah *user*?
-- Apakah dari data tersebut dapat pula dikembangkan sistem rekomendasi *Content Based FIltering*?
+1. Dari data *Implicit Feedback* pada *Steam Store* Apakah dapat dibuatkan sistem rekomendasi yang cukup baik?
+2. Dari serangkaian data tersebut, *Game* apa yang peling banyak dimainkan oleh *user*?
+3. *Game* apa yang memilki *user* paling banyak?
+4. Apakah terdapat korelasi antara lama bermain dengan jumlah *user*?
+5. Apakah dari data tersebut dapat pula dikembangkan sistem rekomendasi *Content Based FIltering*?
 
 ### Goals
 
 Untuk menjawab pertanyaan tersebut akan dibuatkan Sistem Rekomendasi dengan tujuan sebagai berikut :
 
-- Membuat Sistem Rekomendasi *Collaborative Filtering* dari data *Implicit Feedback* pada *Steam Store*.
-- Melakukan Eksplorasi pada data untuk mengetahui *game* apa saja yang paling banyak dimainkan.
-- Melakukan Eksplorasi pada data untuk mengetahui *game* apa yang memiliki *user* paling banyak.
-- Melakukan Eksplorasi pada data untuk mengetahui adanya korelasi antara lama bermain dengan jumlah *user*.
-- Membuat sistem rekomendasi *Content Based Filtering* dari fitur data yang dipilih.
+1. Membuat Sistem Rekomendasi *Collaborative Filtering* dari data *Implicit Feedback* pada *Steam Store*.
+2. Melakukan Eksplorasi pada data untuk mengetahui *game* apa saja yang paling banyak dimainkan.
+3. Melakukan Eksplorasi pada data untuk mengetahui *game* apa yang memiliki *user* paling banyak.
+4. Melakukan Eksplorasi pada data untuk mengetahui adanya korelasi antara lama bermain dengan jumlah *user*.
+5. Membuat sistem rekomendasi *Content Based Filtering* dari fitur data yang dipilih.
 
 ### Solution statements
-- Untuk eksplorasi fitur dilakukan *Univariate Analysis*. *Univariate Analysis* dilakukan untuk mengeksplorasi distribusi suatu fitur yang dipilih dalam suatu dataset. Teknik yang digunakan adalah menggunakan visualiasi data menggunakan barplot dari fitur yang dipilih dan manipulasi dataset.
-- Untuk dapat memberikan rekomendasi berdasarkan data *Implicit Feedback* pada *Steam Store*, akan dibuatkan model *Collaborative Filtering* dengan menggunakan algoritma *BPR: Bayesian Personalized Ranking*.
-- Selain itu dibuatkan pula sistem rekomendasi *Content Based Filtering* dengan menggunakan *Cosine Similarity*.
+1.  Untuk dapat memberikan rekomendasi berdasarkan data *Implicit Feedback* pada *Steam Store*, akan dibuatkan model *Collaborative Filtering* dengan menggunakan algoritma *BPR: Bayesian Personalized Ranking*.
+2.  Untuk eksplorasi data dilakukan *Univariate Analysis* pada *user dataset*, dengan menghitung jumlah jam permainan untuk tiap *game* dan mengurutkan hasilnya dari yang paling banyak jumlah jam permainannya. Serta dibuatkan visualisasi menggunakan barplot.
+3.  Untuk eksplorasi data dilakukan *Univariate Analysis* pada *user dataset*, dengan menghitung jumlah pengguna untuk tiap *game* dan mengurutkan hasilnya dari yang paling banyak jumlah penggunanya. Serta dibuatkan visualisasi menggunakan barplot. 
+4.  Untuk eksplorasi data dilakukan dengan mengamati kedua barplot dan tabel game dengan jumlah jam permainan terbanyak dan jumlah pengguna terbanyak, dan dilihat korelasi antara keduanya.
+5.  Untuk sistem rekomendasi *Content Based Filtering*, dibuatkan sistem rekomendasi *Content Based Filtering* dengan menggunakan *Cosine Similarity* dan menerapkan tiga jenis filter yaitu filter berdasarkan *genre*, *popular tags*, dan *game details*.
 
 ## Data Understanding
 
@@ -549,17 +551,9 @@ Dibuatkan *class RecommenderNet* dengan *keras Model class*. Kode *class Recomme
 
 Selanjutnya, melakukan proses compile terhadap model. Model ini menggunakan *Binary Crossentropy* untuk menghitung *loss function*, *Adam (Adaptive Moment Estimation)* sebagai *optimizer*, dan *root mean squared error (RMSE)* sebagai *metrics evaluation*. Langkah berikutnya, adalah memulai proses training.
 
-#### 4. Visualisasi Metrik
 
-ntuk melihat visualisasi proses training, dilakukan plot metrik evaluasi dengan matplotlib.
 
-![Model-metrics](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/48511ded-3b98-4377-b091-93293b2a7723)
-
-Gambar 9. Visualisasi metrik evaluasi
-
-Dari Gambar 9 terlihat bahwa proses training model cukup smooth pada iterasi ke 30 belum terlihat bahwa model konvergen.Dari proses ini, kita memperoleh nilai error akhir sebesar sekitar 0.3721 dan error pada data validasi sebesar 0.6663. Nilai tersebut cukup bagus untuk sistem rekomendasi.
-
-#### 5. Mendapatkan Rekomendasi Game
+#### 4. Mendapatkan Rekomendasi Game
 
 Untuk mendapatkan rekomendasi game, pertama ambil sampel *user* secara acak dan definisikan variabel *game_not_played* yang merupakan daftar *game* yang belum pernah dimainkan oleh pengguna. Tujuan variabel *game_not_played* ini ditentukan, karena daftar *game_not_played* inilah yang akan menjadi *game* yang akan direkomendasikan. 
 
@@ -569,13 +563,32 @@ Variabel *game_not_played* diperoleh dengan menggunakan operator bitwise (~) pad
 
 Hasil rekomendasinya adalah sebagai berikut:
 
-![image](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/0a3c6af6-4a6b-4743-ba69-b8a70defa1d5)
+Tabel 20. Hasil rekomendasi Collaborative Filtering - BPR
 
-Gambar 10. Hasil rekomendasi Collaborative Filtering - BPR
+|   Showing recommendations for users:    |                 7338                |
+|:---------------------------------------:|:-----------------------------------:|
+| Game with high playing hours from users |                                     |
+|                   Game                  |                Genre                |
+|                  Dota 2                 |    Action, Free to Play, Strategy   |
+|                                         |                                     |
+|       Top 10 game recommendations       |                                     |
+|                   Game                  |                Genre                |
+|              Layers of Fear             |           Adventure, Indie          |
+|                   140                   |            Action, Indie            |
+|               Pyramid Raid              |        Action, Casual, Indie        |
+|                 Dwarf!?                 |       Strategy, Indie, Casual       |
+|                  Saira                  |                Indie                |
+|               Platypus II               |                Action               |
+|            Rustbucket Rumble            | Action, Casual, Free to play, Indie |
+|                   HIT                   |             Free to play            |
+|         Hacker Evolution Duality        |                Indie                |
+|             Game Tycoon 1.5             |         Simulation, Strategy        |
+
+
 
 ## Evaluasi
 
-### - Content Based Filtering - based on Genre
+### - Content-Based Filtering - based on Genre
 
 Untuk mengukur seberapa baik model, digunakan metrik evaluasi. Adapun metrik yang sebagai alat ukur perfoma model yang dibuat antara lain ***Precission***
 
@@ -601,9 +614,19 @@ Untuk menghitung RMSE, hitung residual (perbedaan antara prediksi dan kebenaran)
 
 Root mean square error dapat dihitung dengan persamaan berikut: 
 
-$$RMSE = \sqrt {\frac{\sum_{i=1}^{N} || y(i) - \hat{y}(i) ||^2}{N}}$$
+$$RMSE = \sqrt { \frac{ \sum_{i=1}^{N} || y(i) - \hat{y}(i) ||^2}{N}}$$
 
 di mana N adalah jumlah titik data, y(i) adalah pengukuran ke-i, dan y ̂(i) adalah prediksi yang sesuai.
+
+#### Visualisasi Metrik
+
+Untuk melihat visualisasi metrik evaluasi proses training, dilakukan plot metrik evaluasi dengan matplotlib.
+
+![Model-metrics](https://github.com/Rizki-Kidut/Recomendation-System---Steam-Game/assets/116653612/48511ded-3b98-4377-b091-93293b2a7723)
+
+Gambar 9. Visualisasi metrik evaluasi
+
+Dari Gambar 9 terlihat bahwa proses training model cukup smooth pada iterasi ke 30 belum terlihat bahwa model konvergen.Dari proses ini, kita memperoleh nilai error akhir sebesar sekitar 0.3721 dan error pada data validasi sebesar 0.6663. Nilai tersebut cukup bagus untuk sistem rekomendasi.
 
 Nilai RMSE dari model jika dibandingkan dengan data validasi adalah 0.42014. Nilai RMSE cukup rendah, hal ini menunjukkan bahwa model memiliki akurasi yang cukup baik dalam memberikan rekomendasi dengan pendekatan *Collaborative Filtering*.
 
@@ -616,19 +639,19 @@ Setelah melakukan Ekplorasi Data hingga pembuatan 2 model rekomendasi, maka jawa
 
    Ya, dari data *Implicit Feedback* tersebut telah berhasil dibuat model rekomendasi dengan pendekatan *Collaborative Filtering* dengan Algoritma BPR. Hasil evaluasi model dengan metrics *RMSE* adalah 0.4214, nilai yang cukup bagus. Dan model telah dapat menghasilkan rekomendasi.
 
-- Dari serangkaian data tersebut, *Game* apa yang peling banyak dimainkan oleh *user*?
+2. Dari serangkaian data tersebut, *Game* apa yang peling banyak dimainkan oleh *user*?
 
   Dari Eksplorasi data, *game* yang paling banyak dimainkan oleh *user* adalah *Dota 2* dengan total 4.841 *user* dan total 981.684,6 jam bermain atau setara dengan 112,68 tahun.
      
-- *Game* apa yang memilki *user* paling banyak?
+3. *Game* apa yang memilki *user* paling banyak?
 
   Dari Eksplorasi data, *game* dengan jumlah *user* terbanyak adalah *Dota 2* dengan total 4.841 *user*
   
-- Apakah terdapat korelasi antara lama bermain dengan jumlah *user*?
+4. Apakah terdapat korelasi antara lama bermain dengan jumlah *user*?
 
   Untuk beberapa kasus, tidak ada korelasi antara jumlah total pengguna dan total jam yang dimainkan, yang berarti bahwa jumlah pengguna yang tinggi tidak merepresentasikan jumlah jam yang tinggi pula. Penjelasan yang mungkin untuk hal ini adalah karena game ini dibeli sebagai bagian dari bundel game.
   
-- Apakah dari data tersebut dapat pula dikembangkan sistem rekomendasi *Content Based FIltering*?
+5. Apakah dari data tersebut dapat pula dikembangkan sistem rekomendasi *Content Based FIltering*?
 
   Ya, sistem rekomendasi *Content Based Filtering* telah berhasil dikembangkan dan sudah dapat memberikan rekomendasi dengan 3 macam filter yaitu Genre, Popular Tags, dan Game Details. Hasil evaluasi dengan metriks presisi menunjukkan bahwa hasil rekomendasi relevan dengan nili 100%
 
